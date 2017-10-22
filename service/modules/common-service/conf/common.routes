@@ -1,0 +1,40 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+#search
+POST	/v1/search/compositesearch  			@controllers.search.SearchController.compositeSearch()
+
+
+#Mock APIs to finish API Gateway onboarding
+
+#GET    /v1/user/retire							@controllers.LearnerController.getHealth()
+#GET   /v1/org/member/suspend					@controllers.LearnerController.getHealth()
+#GET   /health									@controllers.healthmanager.HealthController.getHealth()
+
+#bulk upload
+
+POST /v1/user/upload 						@controllers.bulkapimanagement.BulkUploadController.uploadUser()
+POST /v1/bulk/user/upload 						@controllers.bulkapimanagement.BulkUploadController.uploadUser()
+GET  /v1/upload/status/:pid				@controllers.bulkapimanagement.BulkUploadController.getUploadStatus(pid:String)
+POST /v1/org/upload 						@controllers.bulkapimanagement.BulkUploadController.uploadOrg()
+POST /v1/batch/bulk/enrollment 			   @controllers.bulkapimanagement.BulkUploadController.bulkBatchEnrollment()
+GET  /v1/user/data/encrypt				@controllers.bulkapimanagement.BulkUploadController.userDataEncryption()
+GET  /v1/user/data/decrypt				@controllers.bulkapimanagement.BulkUploadController.userDataDecryption()
+
+#POST  /v1/file/upload 						@controllers.storage.FileStorageController.uploadFileService()
+
+#Sync
+POST /v1/data/sync                          @controllers.search.SearchController.sync()
+
+#Email
+POST /v1/notification/email					@controllers.notificationservice.EmailServiceController.sendMail()
+
+
+#Health check
+GET  /v1/health                               @controllers.healthmanager.HealthController.getHealth()
+#GET  /v1/:service/health                      @controllers.healthmanager.HealthController.getLearnerServiceHealth(service:String)
+
+
+#Audit History API
+POST   /v1/audit/history                       @controllers.audit.AuditLogController.searchAuditHistory()

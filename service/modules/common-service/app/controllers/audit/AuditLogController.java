@@ -13,7 +13,7 @@ import org.sunbird.common.request.Request;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.util.Timeout;
-import controllers.BaseController;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 
@@ -33,8 +33,9 @@ public class AuditLogController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log("Request for Search Audit History: " + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.SEARCH_AUDIT_LOG.getKey());
       reqObj.setOperation(ActorOperations.SEARCH_AUDIT_LOG.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.REQUESTED_BY, ctx().flash().get(JsonKey.USER_ID));

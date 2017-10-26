@@ -1,8 +1,10 @@
 package controllers.notesmanagement;
 
 import akka.util.Timeout;
+import controllers.common.BaseController;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.BaseController;
+
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import org.sunbird.common.exception.ProjectCommonException;
@@ -41,8 +43,9 @@ public class NotesController extends BaseController {
         }
       }
       RequestValidator.validateNote(reqObj);
+      reqObj.setManagerName(ActorOperations.CREATE_NOTE.getKey());
       reqObj.setOperation(ActorOperations.CREATE_NOTE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.NOTE, reqObj.getRequest());
@@ -67,8 +70,9 @@ public class NotesController extends BaseController {
       ProjectLogger.log("Update note request: " + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateNoteId(noteId);
+      reqObj.setManagerName(ActorOperations.UPDATE_NOTE.getKey());
       reqObj.setOperation(ActorOperations.UPDATE_NOTE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.NOTE_ID, noteId);
@@ -93,8 +97,9 @@ public class NotesController extends BaseController {
       ProjectLogger.log("Get Note request: " + noteId, LoggerEnum.INFO.name());
       RequestValidator.validateNoteId(noteId);
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_NOTE.getKey());
       reqObj.setOperation(ActorOperations.GET_NOTE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
@@ -118,8 +123,9 @@ public class NotesController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log("Search Note request: " + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.SEARCH_NOTE.getKey());
       reqObj.setOperation(ActorOperations.SEARCH_NOTE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
@@ -143,8 +149,9 @@ public class NotesController extends BaseController {
       ProjectLogger.log("Delete Note request: " + noteId, LoggerEnum.INFO.name());
       Request reqObj = new Request();
       RequestValidator.validateNoteId(noteId);
+      reqObj.setManagerName(ActorOperations.DELETE_NOTE.getKey());
       reqObj.setOperation(ActorOperations.DELETE_NOTE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.NOTE_ID, noteId);

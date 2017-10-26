@@ -1,8 +1,10 @@
 package controllers.storage;
 
 import akka.util.Timeout;
+import controllers.common.BaseController;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.BaseController;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -76,8 +78,9 @@ public class FileStorageController extends BaseController {
             ResponseCode.CLIENT_ERROR.getResponseCode());
         return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
       }
+      reqObj.setManagerName(ActorOperations.FILE_STORAGE_SERVICE.getKey());
       reqObj.setOperation(ActorOperations.FILE_STORAGE_SERVICE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.DATA, map);

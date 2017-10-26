@@ -1,10 +1,17 @@
-package controllers;
+package controllers.common;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
-import controllers.actorutility.ActorSystemFactory;
+import common.util.AuthenticationHelper;
+import common.util.Global;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.response.ResponseParams;
@@ -14,6 +21,8 @@ import org.sunbird.common.models.util.ProjectLogger;
 import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.responsecode.ResponseCode;
+import org.sunbird.common.util.actorutility.ActorSystemFactory;
+
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.Json;
@@ -21,8 +30,6 @@ import play.mvc.Controller;
 import play.mvc.Http.Request;
 import play.mvc.Result;
 import play.mvc.Results;
-import util.AuthenticationHelper;
-import util.Global;
 
 /**
  * This controller we can use for writing some common method.
@@ -35,7 +42,8 @@ public class BaseController extends Controller {
   private static Object actorRef = null;
 
   static {
-    actorRef = ActorSystemFactory.getActorSystem().initializeActorSystem();
+    actorRef = ActorSystemFactory.getActorSystem().initializeActorSystem(null);
+    ProjectLogger.log("actor"+actorRef);
   }
 
   /**
@@ -377,4 +385,22 @@ public class BaseController extends Controller {
     return builder.toString();
   }
 
+  /**
+   * Method to get all request headers
+   * 
+   * @param request play.mvc.Http.Request
+   * @return Map<String, String>
+   */
+  public Map<String, String> getAllRequestHeaders(play.mvc.Http.Request request) {
+
+    Map<String, String> map = new HashMap<>();
+    Map<String, String[]> headers = request.headers();
+    Iterator<Entry<String, String[]>> itr = headers.entrySet().iterator();
+    while (itr.hasNext()) {
+      Entry<String, String[]> entry = itr.next();
+      map.put(entry.getKey(), entry.getValue()[0]);
+    }
+    return map;
+  }
+  
 }

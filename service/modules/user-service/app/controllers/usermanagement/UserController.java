@@ -3,14 +3,12 @@
  */
 package controllers.usermanagement;
 
-import akka.util.Timeout;
-import com.fasterxml.jackson.databind.JsonNode;
-import controllers.BaseController;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.util.ActorOperations;
 import org.sunbird.common.models.util.JsonKey;
@@ -23,6 +21,11 @@ import org.sunbird.common.request.HeaderParam;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.request.RequestValidator;
 import org.sunbird.common.responsecode.ResponseCode;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import akka.util.Timeout;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 
@@ -51,8 +54,9 @@ public class UserController extends BaseController {
         reqObj.getRequest().put(JsonKey.EMAIL_VERIFIED, false);
         reqObj.getRequest().put(JsonKey.PHONE_VERIFIED, false);
       }
+      reqObj.setManagerName(ActorOperations.CREATE_USER.getKey());
       reqObj.setOperation(ActorOperations.CREATE_USER.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       ProjectUtil.updateMapSomeValueTOLowerCase(reqObj);
@@ -97,8 +101,9 @@ public class UserController extends BaseController {
         }
       }
       RequestValidator.validateUpdateUser(reqObj);
+      reqObj.setManagerName(ActorOperations.UPDATE_USER.getKey());
       reqObj.setOperation(ActorOperations.UPDATE_USER.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.USER, reqObj.getRequest());
@@ -131,8 +136,9 @@ public class UserController extends BaseController {
       ProjectLogger.log(" get user login data=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateUserLogin(reqObj);
+      reqObj.setManagerName(ActorOperations.LOGIN.getKey());
       reqObj.setOperation(ActorOperations.LOGIN.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.USER, reqObj.getRequest());
@@ -155,8 +161,9 @@ public class UserController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log(" get user logout data = " + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.LOGOUT.getKey());
       reqObj.setOperation(ActorOperations.LOGOUT.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.USER, reqObj.getRequest());
@@ -182,8 +189,9 @@ public class UserController extends BaseController {
       ProjectLogger.log(" get user change password data = " + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateChangePassword(reqObj);
+      reqObj.setManagerName(ActorOperations.CHANGE_PASSWORD.getKey());
       reqObj.setOperation(ActorOperations.CHANGE_PASSWORD.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.USER, reqObj.getRequest());
@@ -209,8 +217,9 @@ public class UserController extends BaseController {
       String requestedFields = request().getQueryString(JsonKey.FIELDS);
       ProjectLogger.log(" get user profile data by id =" + requestData, LoggerEnum.INFO.name());
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_PROFILE.getKey());
       reqObj.setOperation(ActorOperations.GET_PROFILE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       reqObj.getRequest().put(JsonKey.USER_ID, userId);
@@ -234,8 +243,9 @@ public class UserController extends BaseController {
 
     try {
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_ROLES.getKey());
       reqObj.setOperation(ActorOperations.GET_ROLES.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       reqObj.setRequest(innerMap);
@@ -260,8 +270,9 @@ public class UserController extends BaseController {
           LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateVerifyUser(reqObj);
+      reqObj.setManagerName(ActorOperations.GET_USER_DETAILS_BY_LOGINID.getKey());
       reqObj.setOperation(ActorOperations.GET_USER_DETAILS_BY_LOGINID.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       ProjectUtil.updateMapSomeValueTOLowerCase(reqObj);
@@ -286,8 +297,9 @@ public class UserController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log(" Downlaod user data request =" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.DOWNLOAD_USERS.getKey());
       reqObj.setOperation(ActorOperations.DOWNLOAD_USERS.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       ProjectUtil.updateMapSomeValueTOLowerCase(reqObj);
@@ -312,8 +324,9 @@ public class UserController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log(" blockuser =" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.BLOCK_USER.getKey());
       reqObj.setOperation(ActorOperations.BLOCK_USER.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.USER, reqObj.getRequest());
@@ -337,8 +350,9 @@ public class UserController extends BaseController {
       ProjectLogger.log(" Assign roles api request body =" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateAssignRole(reqObj);
+      reqObj.setManagerName(ActorOperations.ASSIGN_ROLES.getKey());
       reqObj.setOperation(ActorOperations.ASSIGN_ROLES.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       reqObj.getRequest().put(JsonKey.REQUESTED_BY, ctx().flash().get(JsonKey.USER_ID));
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
@@ -359,8 +373,9 @@ public class UserController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log(" unblockuser =" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.UNBLOCK_USER.getKey());
       reqObj.setOperation(ActorOperations.UNBLOCK_USER.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.USER, reqObj.getRequest());
@@ -385,8 +400,9 @@ public class UserController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log("User search api call =" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.COMPOSITE_SEARCH.getKey());
       reqObj.setOperation(ActorOperations.COMPOSITE_SEARCH.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       reqObj.put(JsonKey.REQUESTED_BY, ctx().flash().get(JsonKey.USER_ID));
 
@@ -423,8 +439,9 @@ public class UserController extends BaseController {
       if (reqObj == null) {
         reqObj = new Request();
       }
+      reqObj.setManagerName(ActorOperations.USER_CURRENT_LOGIN.getKey());
       reqObj.setOperation(ActorOperations.USER_CURRENT_LOGIN.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       if (!ProjectUtil.isStringNullOREmpty(userId)) {
         reqObj.getRequest().put(JsonKey.USER_ID, userId);
@@ -446,8 +463,9 @@ public class UserController extends BaseController {
 	    try {
 	      ProjectLogger.log(" get media Types ", LoggerEnum.INFO.name());
 	      Request reqObj = new Request();
+	      reqObj.setManagerName(ActorOperations.GET_MEDIA_TYPES.getKey());
 	      reqObj.setOperation(ActorOperations.GET_MEDIA_TYPES.getValue());
-	      reqObj.setRequest_id(ExecutionContext.getRequestId());
+	      reqObj.setRequestId(ExecutionContext.getRequestId());
 	      reqObj.setEnv(getEnvironment());
 	      HashMap<String, Object> innerMap = new HashMap<>();
 	      innerMap.put(JsonKey.REQUESTED_BY,
@@ -472,8 +490,9 @@ public class UserController extends BaseController {
       ProjectLogger.log(" get user forgot password call = " + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateForgotpassword(reqObj);
+      reqObj.setManagerName(ActorOperations.FORGOT_PASSWORD.getKey());
       reqObj.setOperation(ActorOperations.FORGOT_PASSWORD.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.USER, reqObj.getRequest());

@@ -6,7 +6,7 @@ import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.response.ResponseParams;
 import org.sunbird.common.responsecode.ResponseCode;
 
-import controllers.BaseController;
+import controllers.common.BaseController;
 import play.mvc.Result;
 
 

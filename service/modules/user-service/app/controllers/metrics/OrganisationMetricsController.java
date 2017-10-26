@@ -1,15 +1,17 @@
 package controllers.metrics;
 
-import akka.util.Timeout;
-import controllers.BaseController;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import org.sunbird.common.models.util.ActorOperations;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.ProjectLogger;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.Request;
+
+import akka.util.Timeout;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 
@@ -25,10 +27,11 @@ public class OrganisationMetricsController extends BaseController {
       Request request = new Request();
       request.setEnv(getEnvironment());
       request.setRequest(map);
+      request.setManagerName(ActorOperations.ORG_CREATION_METRICS.getKey());
       request.setOperation(ActorOperations.ORG_CREATION_METRICS.getValue());
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       ProjectLogger.log("Return from Org Metrics Creation Contoller");
       return actorResponseHandler(getRemoteActor(), request, timeout, null, request());
     } catch (Exception e) {
@@ -46,10 +49,11 @@ public class OrganisationMetricsController extends BaseController {
       Request request = new Request();
       request.setEnv(getEnvironment());
       request.setRequest(map);
+      request.setManagerName(ActorOperations.ORG_CONSUMPTION_METRICS.getKey());
       request.setOperation(ActorOperations.ORG_CONSUMPTION_METRICS.getValue());
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       ProjectLogger.log("Return from Org Metrics Consumption Contoller");
       return actorResponseHandler(getRemoteActor(), request, timeout, null, request());
     } catch (Exception e) {
@@ -69,10 +73,11 @@ public class OrganisationMetricsController extends BaseController {
       map.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
       Request request = new Request();
       request.setEnv(getEnvironment());
+      request.setManagerName(ActorOperations.ORG_CREATION_METRICS_REPORT.getKey());
       request.setOperation(ActorOperations.ORG_CREATION_METRICS_REPORT.getValue());
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       ProjectLogger.log("Return from Org Creation Report Contoller");
       return  actorResponseHandler(getRemoteActor(), request, timeout, null, request());
     } catch (Exception e) {
@@ -92,10 +97,11 @@ public class OrganisationMetricsController extends BaseController {
       map.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
       Request request = new Request();
       request.setEnv(getEnvironment());
+      request.setManagerName(ActorOperations.ORG_CONSUMPTION_METRICS_REPORT.getKey());
       request.setOperation(ActorOperations.ORG_CONSUMPTION_METRICS_REPORT.getValue());
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       ProjectLogger.log("Return from Org Consumption Report Contoller");
       return actorResponseHandler(getRemoteActor(), request, timeout, null, request());
     } catch (Exception e) {

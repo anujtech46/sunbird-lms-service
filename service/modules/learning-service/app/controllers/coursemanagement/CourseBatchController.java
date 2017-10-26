@@ -3,16 +3,12 @@
  */
 package controllers.coursemanagement;
 
-import akka.util.Timeout;
-import com.fasterxml.jackson.databind.JsonNode;
-import controllers.BaseController;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+
 import org.sunbird.common.models.util.ActorOperations;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LoggerEnum;
@@ -22,6 +18,11 @@ import org.sunbird.common.models.util.ProjectUtil.EsType;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.request.RequestValidator;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import akka.util.Timeout;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 
@@ -45,8 +46,9 @@ public class CourseBatchController extends BaseController {
       ProjectLogger.log("create new batch request data=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateCreateBatchReq(reqObj);
+      reqObj.setManagerName(ActorOperations.CREATE_BATCH.getKey());
       reqObj.setOperation(ActorOperations.CREATE_BATCH.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       if (!ProjectUtil.isStringNullOREmpty((String) reqObj.getRequest().get(JsonKey.BATCH_ID))) {
@@ -75,8 +77,9 @@ public class CourseBatchController extends BaseController {
       ProjectLogger.log("update batch request data=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateUpdateCourseBatchReq(reqObj);
+      reqObj.setManagerName(ActorOperations.UPDATE_BATCH.getKey());
       reqObj.setOperation(ActorOperations.UPDATE_BATCH.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.BATCH, reqObj.getRequest());
@@ -101,8 +104,9 @@ public class CourseBatchController extends BaseController {
       ProjectLogger.log("Delete batch=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateAddBatchCourse(reqObj);
+      reqObj.setManagerName(ActorOperations.REMOVE_BATCH.getKey());
       reqObj.setOperation(ActorOperations.REMOVE_BATCH.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.BATCH, reqObj.getRequest());
@@ -127,8 +131,9 @@ public class CourseBatchController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log("Add user to batch=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.ADD_USER_TO_BATCH.getKey());
       reqObj.setOperation(ActorOperations.ADD_USER_TO_BATCH.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       reqObj.getRequest().put(JsonKey.BATCH_ID, batchId);
       HashMap<String, Object> innerMap = new HashMap<>();
@@ -155,8 +160,9 @@ public class CourseBatchController extends BaseController {
       ProjectLogger.log("Remove user to batch=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateAddBatchCourse(reqObj);
+      reqObj.setManagerName(ActorOperations.REMOVE_USER_FROM_BATCH.getKey());
       reqObj.setOperation(ActorOperations.REMOVE_USER_FROM_BATCH.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.BATCH, reqObj.getRequest());
@@ -179,8 +185,9 @@ public class CourseBatchController extends BaseController {
     try {
       ProjectLogger.log("get batch=" + batchId, LoggerEnum.INFO.name());
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_BATCH.getKey());
       reqObj.setOperation(ActorOperations.GET_BATCH.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       reqObj.getRequest().put(JsonKey.BATCH_ID, batchId);
@@ -196,23 +203,6 @@ public class CourseBatchController extends BaseController {
 
 
   /**
-   * 
-   * @param request
-   * @return Map<String, String>
-   */
-  private Map<String, String> getAllRequestHeaders(play.mvc.Http.Request request) {
-    Map<String, String> map = new HashMap<>();
-    Map<String, String[]> headers = request.headers();
-    Iterator<Entry<String, String[]>> itr = headers.entrySet().iterator();
-    while (itr.hasNext()) {
-      Entry<String, String[]> entry = itr.next();
-      map.put(entry.getKey(), entry.getValue()[0]);
-    }
-    return map;
-  }
-
-
-  /**
    * This method will do the user search for Elastic search. this will internally call composite
    * search api.
    *
@@ -224,8 +214,9 @@ public class CourseBatchController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log("Course batch search api call =" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+      reqObj.setManagerName(ActorOperations.COMPOSITE_SEARCH.getKey());
       reqObj.setOperation(ActorOperations.COMPOSITE_SEARCH.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       reqObj.put(JsonKey.REQUESTED_BY, ctx().flash().get(JsonKey.USER_ID));
 

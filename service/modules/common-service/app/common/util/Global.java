@@ -2,9 +2,8 @@
 /**
  * 
  */
-package util;
+package common.util;
 
-import controllers.BaseController;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +18,8 @@ import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.models.util.ProjectUtil.Environment;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.responsecode.ResponseCode;
+
+import controllers.common.BaseController;
 import play.Application;
 import play.GlobalSettings;
 import play.libs.F.Promise;

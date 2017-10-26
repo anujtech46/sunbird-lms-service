@@ -3,14 +3,9 @@
  */
 package controllers.pagemanagement;
 
-import akka.util.Timeout;
-import com.fasterxml.jackson.databind.JsonNode;
-import controllers.BaseController;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+
 import org.sunbird.common.models.util.ActorOperations;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LoggerEnum;
@@ -18,6 +13,11 @@ import org.sunbird.common.models.util.ProjectLogger;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.request.RequestValidator;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import akka.util.Timeout;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 
@@ -42,8 +42,9 @@ public class PageController extends BaseController {
           LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateCreatePage(reqObj);
+      reqObj.setManagerName(ActorOperations.CREATE_PAGE.getKey());
       reqObj.setOperation(ActorOperations.CREATE_PAGE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.getRequest().put(JsonKey.CREATED_BY, ctx().flash().get(JsonKey.USER_ID));
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> map = new HashMap<>();
@@ -70,8 +71,9 @@ public class PageController extends BaseController {
           LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateUpdatepage(reqObj);
+      reqObj.setManagerName(ActorOperations.UPDATE_PAGE.getKey());
       reqObj.setOperation(ActorOperations.UPDATE_PAGE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.getRequest().put(JsonKey.UPDATED_BY, ctx().flash().get(JsonKey.USER_ID));
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> map = new HashMap<>();
@@ -96,8 +98,9 @@ public class PageController extends BaseController {
       ProjectLogger.log("getting data for particular page settings = " + pageId,
           LoggerEnum.INFO.name());
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_PAGE_SETTING.getKey());
       reqObj.setOperation(ActorOperations.GET_PAGE_SETTING.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       reqObj.getRequest().put(JsonKey.ID, pageId);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
@@ -118,8 +121,9 @@ public class PageController extends BaseController {
     try {
       ProjectLogger.log("getting page settings api called = ", LoggerEnum.INFO.name());
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_PAGE_SETTINGS.getKey());
       reqObj.setOperation(ActorOperations.GET_PAGE_SETTINGS.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
       return actorResponseHandler(getRemoteActor(), reqObj, timeout, null, request());
@@ -140,8 +144,9 @@ public class PageController extends BaseController {
       ProjectLogger.log("requested data for get page  = " + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateGetPageData(reqObj);
+      reqObj.setManagerName(ActorOperations.GET_PAGE_DATA.getKey());
       reqObj.setOperation(ActorOperations.GET_PAGE_DATA.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       reqObj.getRequest().put(JsonKey.CREATED_BY, ctx().flash().get(JsonKey.USER_ID));
       HashMap<String, Object> map = new HashMap<>();
@@ -155,23 +160,7 @@ public class PageController extends BaseController {
     }
   }
 
-  /**
-   * Method to get all request headers
-   * 
-   * @param request play.mvc.Http.Request
-   * @return Map<String, String>
-   */
-  private Map<String, String> getAllRequestHeaders(play.mvc.Http.Request request) {
-
-    Map<String, String> map = new HashMap<>();
-    Map<String, String[]> headers = request.headers();
-    Iterator<Entry<String, String[]>> itr = headers.entrySet().iterator();
-    while (itr.hasNext()) {
-      Entry<String, String[]> entry = itr.next();
-      map.put(entry.getKey(), entry.getValue()[0]);
-    }
-    return map;
-  }
+  
 
 
   /**
@@ -187,8 +176,9 @@ public class PageController extends BaseController {
           LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateCreateSection(reqObj);
+      reqObj.setManagerName(ActorOperations.CREATE_SECTION.getKey());
       reqObj.setOperation(ActorOperations.CREATE_SECTION.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.getRequest().put(JsonKey.CREATED_BY, ctx().flash().get(JsonKey.USER_ID));
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> map = new HashMap<>();
@@ -215,8 +205,9 @@ public class PageController extends BaseController {
           LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateUpdateSection(reqObj);
+      reqObj.setManagerName(ActorOperations.UPDATE_SECTION.getKey());
       reqObj.setOperation(ActorOperations.UPDATE_SECTION.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       reqObj.getRequest().put(JsonKey.UPDATED_BY, ctx().flash().get(JsonKey.USER_ID));
@@ -241,8 +232,9 @@ public class PageController extends BaseController {
       ProjectLogger.log("getting data for particular page section =" + sectionId,
           LoggerEnum.INFO.name());
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_SECTION.getKey());
       reqObj.setOperation(ActorOperations.GET_SECTION.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       reqObj.getRequest().put(JsonKey.ID, sectionId);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
@@ -263,8 +255,9 @@ public class PageController extends BaseController {
     try {
       ProjectLogger.log("get page all section method called = ", LoggerEnum.INFO.name());
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_ALL_SECTION.getKey());
       reqObj.setOperation(ActorOperations.GET_ALL_SECTION.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
       return actorResponseHandler(getRemoteActor(), reqObj, timeout, null, request());

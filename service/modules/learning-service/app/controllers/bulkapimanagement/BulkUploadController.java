@@ -1,8 +1,10 @@
 package controllers.bulkapimanagement;
 
 import akka.util.Timeout;
+import controllers.common.BaseController;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.BaseController;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -82,8 +84,9 @@ public class BulkUploadController extends BaseController {
         return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
       }
       RequestValidator.validateUploadUser(reqObj);
+      reqObj.setManagerName(ActorOperations.BULK_UPLOAD.getKey());
       reqObj.setOperation(ActorOperations.BULK_UPLOAD.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.DATA, map);
@@ -110,8 +113,9 @@ public class BulkUploadController extends BaseController {
     try {
       ProjectLogger.log("get bulk operation status =" + processId, LoggerEnum.INFO.name());
       Request reqObj = new Request();
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
+      reqObj.setManagerName(ActorOperations.GET_BULK_OP_STATUS.getKey());
       reqObj.setOperation(ActorOperations.GET_BULK_OP_STATUS.getValue());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.PROCESS_ID, processId);
@@ -171,8 +175,9 @@ public class BulkUploadController extends BaseController {
         return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
       }
       reqObj.getRequest().putAll(map);
+      reqObj.setManagerName(ActorOperations.BULK_UPLOAD.getKey());
       reqObj.setOperation(ActorOperations.BULK_UPLOAD.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.DATA, map);
@@ -234,9 +239,9 @@ public class BulkUploadController extends BaseController {
             ResponseCode.CLIENT_ERROR.getResponseCode());
         return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
       }
-
+      reqObj.setManagerName(ActorOperations.BULK_UPLOAD.getKey());
       reqObj.setOperation(ActorOperations.BULK_UPLOAD.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.DATA, map);
@@ -256,8 +261,9 @@ public class BulkUploadController extends BaseController {
   public Promise<Result> userDataEncryption() {
     try {
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.ENCRYPT_USER_DATA.getKey());
       reqObj.setOperation(ActorOperations.ENCRYPT_USER_DATA.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.getRequest().put(JsonKey.REQUESTED_BY, ctx().flash().get(JsonKey.USER_ID));
       reqObj.setEnv(getEnvironment());
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
@@ -270,8 +276,9 @@ public class BulkUploadController extends BaseController {
   public Promise<Result> userDataDecryption() {
     try {
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.DECRYPT_USER_DATA.getKey());
       reqObj.setOperation(ActorOperations.DECRYPT_USER_DATA.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.getRequest().put(JsonKey.REQUESTED_BY, ctx().flash().get(JsonKey.USER_ID));
       reqObj.setEnv(getEnvironment());
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);

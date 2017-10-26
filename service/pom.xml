@@ -111,6 +111,12 @@
         </dependency>
         <dependency>
             <groupId>org.sunbird</groupId>
+            <artifactId>common-service</artifactId>
+            <version>${project.version}</version>
+             <type>play2</type>
+        </dependency>
+        <dependency>
+            <groupId>org.sunbird</groupId>
             <artifactId>learning-service</artifactId>
             <version>${project.version}</version>
             <type>play2</type>

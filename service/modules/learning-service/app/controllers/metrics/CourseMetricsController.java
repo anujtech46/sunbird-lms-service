@@ -1,7 +1,8 @@
 package controllers.metrics;
 
 import akka.util.Timeout;
-import controllers.BaseController;
+import controllers.common.BaseController;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -24,10 +25,11 @@ public class CourseMetricsController extends BaseController {
       map.put(JsonKey.PERIOD, periodStr);
       map.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
       request.setRequest(map);
+      request.setManagerName(ActorOperations.COURSE_PROGRESS_METRICS.getKey());
       request.setOperation(ActorOperations.COURSE_PROGRESS_METRICS.getValue());
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       return actorResponseHandler(getRemoteActor(), request, timeout, null, request());
     } catch (Exception e) {
       return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
@@ -40,13 +42,14 @@ public class CourseMetricsController extends BaseController {
       Map<String, Object> map = new HashMap<>();
       Request request = new Request();
       request.setEnv(getEnvironment());
+      request.setManagerName(ActorOperations.COURSE_CREATION_METRICS.getKey());
       request.setOperation(ActorOperations.COURSE_CREATION_METRICS.getValue());
       map.put(JsonKey.COURSE_ID, courseId);
       map.put(JsonKey.PERIOD, periodStr);
       map.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       return actorResponseHandler(getRemoteActor(), request, timeout, null, request());
     } catch (Exception e) {
       return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
@@ -65,10 +68,11 @@ public class CourseMetricsController extends BaseController {
       map.put(JsonKey.FORMAT , reportType);
       map.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
       request.setRequest(map);
+      request.setManagerName(ActorOperations.COURSE_PROGRESS_METRICS_REPORT.getKey());
       request.setOperation(ActorOperations.COURSE_PROGRESS_METRICS_REPORT.getValue());
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       return actorResponseHandler(getRemoteActor(), request, timeout, null, request());
     } catch (Exception e) {
       return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
@@ -80,13 +84,14 @@ public class CourseMetricsController extends BaseController {
       String periodStr = request().getQueryString("period");
       Map<String, Object> map = new HashMap<>();
       Request request = new Request();
+      request.setManagerName(ActorOperations.COURSE_CREATION_METRICS_REPORT.getKey());
       request.setEnv(getEnvironment());
       request.setOperation(ActorOperations.COURSE_CREATION_METRICS_REPORT.getValue());
       map.put(JsonKey.COURSE_ID, courseId);
       map.put(JsonKey.PERIOD, periodStr);
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       Promise<Result> res =
           actorResponseHandler(getRemoteActor(), request, timeout, null, request());
       return res;

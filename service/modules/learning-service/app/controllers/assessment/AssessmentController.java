@@ -3,12 +3,6 @@
  */
 package controllers.assessment;
 
-import akka.util.Timeout;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
-import controllers.BaseController;
-
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -17,10 +11,13 @@ import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LoggerEnum;
 import org.sunbird.common.models.util.ProjectLogger;
 import org.sunbird.common.request.ExecutionContext;
-import org.sunbird.common.request.HeaderParam;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.request.RequestValidator;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import akka.util.Timeout;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 
@@ -44,8 +41,9 @@ public class AssessmentController extends BaseController {
       ProjectLogger.log("add new assessment data=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateSaveAssessment(reqObj);
+      reqObj.setManagerName(ActorOperations.SAVE_ASSESSMENT.getKey());
       reqObj.setOperation(ActorOperations.SAVE_ASSESSMENT.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.ASSESSMENT, reqObj.getRequest());
@@ -72,8 +70,9 @@ public class AssessmentController extends BaseController {
       ProjectLogger.log("get assessment request=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateGetAssessment(reqObj);
+      reqObj.setManagerName(ActorOperations.GET_ASSESSMENT.getKey());
       reqObj.setOperation(ActorOperations.GET_ASSESSMENT.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.ASSESSMENT, reqObj.getRequest());

@@ -11,12 +11,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.request.HeaderParam;
+
 import play.mvc.Http;
 import play.mvc.Http.RequestBuilder;
 import play.mvc.Result;
@@ -46,7 +45,7 @@ public class IntegrationTest {
 	  @Before
 	  public void setUp() throws Exception {
 	      Map<String, String> flashData = Collections.emptyMap();
-	     // Http.Context context = new Http.Context(200L,null, request, flashData, flashData, null);
+	      //Http.Context context = new Http.Context(200L,null, request, flashData, flashData, null);
 	      //Http.Context.current.set(context);
 	  }
 

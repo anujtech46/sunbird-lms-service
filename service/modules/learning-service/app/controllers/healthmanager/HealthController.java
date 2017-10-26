@@ -5,10 +5,8 @@ package controllers.healthmanager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.sunbird.common.models.response.Response;
@@ -20,11 +18,10 @@ import org.sunbird.common.models.util.ProjectLogger;
 import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.models.util.PropertiesCache;
 import org.sunbird.common.request.ExecutionContext;
-import org.sunbird.common.request.HeaderParam;
 import org.sunbird.common.request.Request;
 
 import akka.util.Timeout;
-import controllers.BaseController;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 
@@ -50,8 +47,9 @@ public class HealthController extends BaseController {
     try {
       ProjectLogger.log("Call to get all server health api = " , LoggerEnum.INFO.name());
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.HEALTH_CHECK.getKey());
       reqObj.setOperation(ActorOperations.HEALTH_CHECK.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.getRequest().put(JsonKey.CREATED_BY,ctx().flash().get(JsonKey.USER_ID));
       reqObj.setEnv(getEnvironment());
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
@@ -77,7 +75,7 @@ public class HealthController extends BaseController {
         try{
         Request reqObj = new Request();
         reqObj.setOperation(val);
-        reqObj.setRequest_id(ExecutionContext.getRequestId());
+        reqObj.setRequestId(ExecutionContext.getRequestId());
         reqObj.getRequest().put(JsonKey.CREATED_BY,ctx().flash().get(JsonKey.USER_ID));
         reqObj.setEnv(getEnvironment());
         Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
@@ -143,20 +141,4 @@ public class HealthController extends BaseController {
     return Promise.<Result>pure(ok(play.libs.Json.toJson(response)));
   }
   
-  
-  /**
-   * 
-   * @param request
-   * @return Map<String, String>
-   */
-  private Map<String, String> getAllRequestHeaders(play.mvc.Http.Request request) {
-    Map<String, String> map = new HashMap<>();
-    Map<String, String[]> headers = request.headers();
-    Iterator<Entry<String, String[]>> itr = headers.entrySet().iterator();
-    while (itr.hasNext()) {
-      Entry<String, String[]> entry = itr.next();
-      map.put(entry.getKey(), entry.getValue()[0]);
-    }
-    return map;
-  }
 }

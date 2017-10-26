@@ -1,8 +1,10 @@
 package controllers.notificationservice;
 
 import akka.util.Timeout;
+import controllers.common.BaseController;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.BaseController;
+
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import org.sunbird.common.models.util.ActorOperations;
@@ -29,8 +31,9 @@ public class EmailServiceController extends BaseController {
       ProjectLogger.log("send Mail : =" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateSendMail(reqObj);
+      reqObj.setManagerName(ActorOperations.EMAIL_SERVICE.getKey());
       reqObj.setOperation(ActorOperations.EMAIL_SERVICE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.EMAIL_REQUEST, reqObj.getRequest());

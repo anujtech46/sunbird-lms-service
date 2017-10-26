@@ -3,14 +3,11 @@
  */
 package controllers;
 
-import akka.util.Timeout;
-import com.fasterxml.jackson.databind.JsonNode;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.util.ActorOperations;
 import org.sunbird.common.models.util.JsonKey;
@@ -20,6 +17,11 @@ import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.request.RequestValidator;
 import org.sunbird.common.responsecode.ResponseCode;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import akka.util.Timeout;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -45,10 +47,11 @@ public class LearnerController extends BaseController {
       Request request = new Request();
       request.setEnv(getEnvironment());
       request.setRequest(map);
+      request.setManagerName(ActorOperations.GET_COURSE.getKey());
       request.setOperation(ActorOperations.GET_COURSE.getValue());
       request.setRequest(map);
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      request.setRequest_id(ExecutionContext.getRequestId());
+      request.setRequestId(ExecutionContext.getRequestId());
       return   actorResponseHandler(getRemoteActor(), request, timeout, JsonKey.COURSES, request());
     } catch (Exception e) {
       return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
@@ -66,7 +69,8 @@ public class LearnerController extends BaseController {
       ProjectLogger.log(" get course request data=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateEnrollCourse(reqObj);
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
+      reqObj.setManagerName(ActorOperations.ENROLL_COURSE.getKey());
       reqObj.setOperation(ActorOperations.ENROLL_COURSE.getValue());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
@@ -81,22 +85,6 @@ public class LearnerController extends BaseController {
     }
   }
 
-  /**
-   * 
-   * @param request
-   * @return Map<String, String>
-   */
-  private Map<String, String> getAllRequestHeaders(play.mvc.Http.Request request) {
-    Map<String, String> map = new HashMap<>();
-    Map<String, String[]> headers = request.headers();
-    Iterator<Entry<String, String[]>> itr = headers.entrySet().iterator();
-    while (itr.hasNext()) {
-      Entry<String, String[]> entry = itr.next();
-      map.put(entry.getKey(), entry.getValue()[0]);
-    }
-    return map;
-  }
-
 
   /**
    * This method will provide list of user content state. Content refer user activity {started,half
@@ -109,7 +97,8 @@ public class LearnerController extends BaseController {
       JsonNode requestData = request().body().asJson();
       ProjectLogger.log(" get course request data=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
+      reqObj.setManagerName(ActorOperations.GET_CONTENT.getKey());
       reqObj.setOperation(ActorOperations.GET_CONTENT.getValue());
       reqObj.setEnv(getEnvironment());
       Map<String, Object> innerMap = createRequest(reqObj);
@@ -167,8 +156,9 @@ public class LearnerController extends BaseController {
       ProjectLogger.log(" get content request data=" + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateUpdateContent(reqObj);
+      reqObj.setManagerName(ActorOperations.ADD_CONTENT.getKey());
       reqObj.setOperation(ActorOperations.ADD_CONTENT.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.setEnv(getEnvironment());
       HashMap<String, Object> innerMap = new HashMap<>();
       innerMap.put(JsonKey.CONTENTS, reqObj.getRequest().get(JsonKey.CONTENTS));

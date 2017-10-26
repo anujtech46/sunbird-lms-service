@@ -16,7 +16,7 @@ import org.sunbird.common.request.RequestValidator;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.util.Timeout;
-import controllers.BaseController;
+import controllers.common.BaseController;
 import play.libs.F.Promise;
 import play.mvc.Result;
 
@@ -35,8 +35,9 @@ public class BadgesController  extends BaseController{
     try {
       ProjectLogger.log("Call to get badges master data. = " , LoggerEnum.INFO.name());
       Request reqObj = new Request();
+      reqObj.setManagerName(ActorOperations.GET_ALL_BADGE.getKey());
       reqObj.setOperation(ActorOperations.GET_ALL_BADGE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.getRequest().put(JsonKey.CREATED_BY,ctx().flash().get(JsonKey.USER_ID));
       reqObj.setEnv(getEnvironment());
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
@@ -56,8 +57,9 @@ public class BadgesController  extends BaseController{
       ProjectLogger.log("call to add user badges api." + requestData, LoggerEnum.INFO.name());
       Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
       RequestValidator.validateAddUserBadge(reqObj);
+      reqObj.setManagerName(ActorOperations.ADD_USER_BADGE.getKey());
       reqObj.setOperation(ActorOperations.ADD_USER_BADGE.getValue());
-      reqObj.setRequest_id(ExecutionContext.getRequestId());
+      reqObj.setRequestId(ExecutionContext.getRequestId());
       reqObj.getRequest().put(JsonKey.CREATED_BY,ctx().flash().get(JsonKey.USER_ID));
       reqObj.setEnv(getEnvironment());
       Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);

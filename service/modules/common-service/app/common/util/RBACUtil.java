@@ -1,7 +1,7 @@
 /**
  * 
  */
-package util;
+package common.util;
 
 /**
  * This is role based access control class. This class will handle user role based access control.

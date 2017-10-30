@@ -6,3 +6,150 @@
 #->  / common.Routes
 ->   / user.Routes
 ->   / learning.Routes
+#user management api 
+POST	/v1/user/create				    @controllers.usermanagement.UserController.createUser()
+PATCH	/v1/user/update					@controllers.usermanagement.UserController.updateUserProfile()
+POST	/v1/user/login					@controllers.usermanagement.UserController.login()
+POST	/v1/user/logout					@controllers.usermanagement.UserController.logout()
+POST	/v1/user/changepassword			@controllers.usermanagement.UserController.changePassword()
+GET  	/v1/user/getprofile/:uid			@controllers.usermanagement.UserController.getUserProfile(uid:String)
+GET  	/v1/user/read/:uid				@controllers.usermanagement.UserController.getUserProfile(uid:String)
+POST    /v1/user/getuser                 @controllers.usermanagement.UserController.getUserDetailsByLoginId()
+POST    /v1/user/download				@controllers.usermanagement.UserController.downloadUsers()
+POST  	/v1/user/block			         @controllers.usermanagement.UserController.blockUser()
+POST    /v1/user/assign/role			 @controllers.usermanagement.UserController.assignRoles()
+POST  	/v1/user/unblock			         @controllers.usermanagement.UserController.unBlockUser()
+PATCH   /v1/user/update/logintime			 @controllers.usermanagement.UserController.updateLoginTime()
+GET     /v1/user/mediatype/list               @controllers.usermanagement.UserController.getMediaTypes()
+POST    /v1/user/forgotpassword			@controllers.usermanagement.UserController.forgotpassword()
+
+#course management api
+POST	/v1/course/create		@controllers.coursemanagement.CourseController.createCourse()
+PATCH	/v1/course/update		@controllers.coursemanagement.CourseController.updateCourse()
+POST	/v1/course/publish      @controllers.coursemanagement.CourseController.publishCourse()
+POST	/v1/course/search       @controllers.coursemanagement.CourseController.searchCourse()
+POST	/v1/course/delete       @controllers.coursemanagement.CourseController.deleteCourse()
+GET	    /v1/course/:courseId     @controllers.coursemanagement.CourseController.getCourseById(courseId:String)
+GET 	/v1/recommended/courses     @controllers.coursemanagement.CourseController.recommendedCourses()
+
+#organisation management api
+POST	 /v1/org/create		@controllers.organisationmanagement.OrganisationController.createOrg()
+PATCH	 /v1/org/update		@controllers.organisationmanagement.OrganisationController.updateOrg()
+POST	 /v1/org/read     @controllers.organisationmanagement.OrganisationController.getOrgDetails()
+PATCH	/v1/org/status/update		@controllers.organisationmanagement.OrganisationController.updateOrgStatus()
+POST    /v1/org/approve             @controllers.organisationmanagement.OrganisationController.approveOrg()
+POST    /v1/org/member/join            @controllers.organisationmanagement.OrganisationController.joinUserOrganisation()
+POST    /v1/org/member/approve         @controllers.organisationmanagement.OrganisationController.approveUserOrganisation()
+POST    /v1/org/member/reject         @controllers.organisationmanagement.OrganisationController.rejectUserOrganisation()
+POST     /v1/org/member/add			@controllers.organisationmanagement.OrganisationController.addMemberToOrganisation()
+POST    /v1/org/member/remove	@controllers.organisationmanagement.OrganisationController.removeMemberFromOrganisation()
+POST	/v1/org/download		@controllers.organisationmanagement.OrganisationController.downloadOrgs()
+GET		/v1/org/type/list		@controllers.organisationmanagement.OrganisationController.getOrgTypeList()
+POST	/v1/org/type/create		@controllers.organisationmanagement.OrganisationController.createOrgType()
+PATCH	/v1/org/type/update		@controllers.organisationmanagement.OrganisationController.updateOrgType()
+
+#page management api
+POST	/v1/page/create				  @controllers.pagemanagement.PageController.createPage()
+PATCH	/v1/page/update				  @controllers.pagemanagement.PageController.updatePage()
+GET	    /v1/page/read/:pageId    		  @controllers.pagemanagement.PageController.getPageSetting(pageId:String)
+GET	    /v1/page/all/settings			  @controllers.pagemanagement.PageController.getPageSettings()
+POST     /v1/page/assemble		  @controllers.pagemanagement.PageController.getPageData()
+
+#Section management
+POST	/v1/page/section/create				  @controllers.pagemanagement.PageController.createPageSection()
+PATCH	/v1/page/section/update				  @controllers.pagemanagement.PageController.updatePageSection()
+GET	    /v1/page/section/list			@controllers.pagemanagement.PageController.getSections()
+GET     /v1/page/section/read/:sectionId		      @controllers.pagemanagement.PageController.getSection(sectionId:String)
+
+#Assessment management
+POST   /v1/assessment/update					 @controllers.assessment.AssessmentController.saveAssessment()
+POST   /v1/assessment/result/read					 @controllers.assessment.AssessmentController.getAssessment()
+
+#permission
+
+GET   /v1/role/read						@controllers.usermanagement.UserController.getRoles()
+
+#search
+POST	/v1/search/compositesearch  			@controllers.search.SearchController.compositeSearch()
+
+
+#Mock APIs to finish API Gateway onboarding
+
+POST   /v1/user/search							@controllers.usermanagement.UserController.search()
+GET    /v1/user/retire							@controllers.LearnerController.getHealth()
+GET   /v1/org/member/suspend					@controllers.LearnerController.getHealth()
+POST  /v1/org/search							@controllers.organisationmanagement.OrganisationController.search()
+GET   /health									@controllers.healthmanager.HealthController.getHealth()
+
+#bulk upload
+
+POST /v1/user/upload 						@controllers.bulkapimanagement.BulkUploadController.uploadUser()
+POST /v1/bulk/user/upload 						@controllers.bulkapimanagement.BulkUploadController.uploadUser()
+GET  /v1/upload/status/:pid				@controllers.bulkapimanagement.BulkUploadController.getUploadStatus(pid:String)
+POST /v1/org/upload 						@controllers.bulkapimanagement.BulkUploadController.uploadOrg()
+POST /v1/batch/bulk/enrollment 			   @controllers.bulkapimanagement.BulkUploadController.bulkBatchEnrollment()
+GET  /v1/user/data/encrypt				@controllers.bulkapimanagement.BulkUploadController.userDataEncryption()
+GET  /v1/user/data/decrypt				@controllers.bulkapimanagement.BulkUploadController.userDataDecryption()
+
+POST  /v1/file/upload 						@controllers.storage.FileStorageController.uploadFileService()
+
+#Course batch
+POST     /v1/course/batch/create				@controllers.coursemanagement.CourseBatchController.createBatch()
+PATCH 	 /v1/course/batch/update				@controllers.coursemanagement.CourseBatchController.updateBatch()
+POST	 /v1/course/batch/users/add/:batchId			@controllers.coursemanagement.CourseBatchController.addUserToBatch(batchId:String)
+POST	 /v1/course/batch/users/remove          @controllers.coursemanagement.CourseBatchController.removeUsersFromBatch()
+GET		 /v1/course/batch/read/:batchId			@controllers.coursemanagement.CourseBatchController.getBatch(batchId:String)
+POST     /v1/course/batch/search                @controllers.coursemanagement.CourseBatchController.search()
+
+#metrics APIs for dashboard
+GET  /v1/dashboard/creation/org/:orgId            @controllers.metrics.OrganisationMetricsController.orgCreation(orgId:String)
+GET  /v1/dashboard/consumption/org/:orgId         @controllers.metrics.OrganisationMetricsController.orgConsumption(orgId:String)
+GET  /v1/dashboard/progress/course/:batchId      @controllers.metrics.CourseMetricsController.courseProgress(batchId:String)
+GET  /v1/dashboard/consumption/course/:courseId   @controllers.metrics.CourseMetricsController.courseCreation(courseId:String)
+GET  /v1/dashboard/creation/user/:userId          @controllers.metrics.UserMetricsController.userCreation(userId:String)
+GET  /v1/dashboard/consumption/user/:userId       @controllers.metrics.UserMetricsController.userConsumption(userId:String)
+
+GET  /v1/dashboard/creation/org/:orgId/export            @controllers.metrics.OrganisationMetricsController.orgCreationReport(orgId:String)
+GET  /v1/dashboard/consumption/org/:orgId/export         @controllers.metrics.OrganisationMetricsController.orgConsumptionReport(orgId:String)
+GET  /v1/dashboard/progress/course/:courseId/export      @controllers.metrics.CourseMetricsController.courseProgressReport(courseId:String)
+
+
+
+#Sync
+POST /v1/data/sync                          @controllers.search.SearchController.sync()
+
+#Email
+POST /v1/notification/email					@controllers.notificationservice.EmailServiceController.sendMail()
+
+#Badges api
+
+GET  /v1/badges/list                        @controllers.badges.BadgesController.getBadges()
+POST /v1/user/badges/add					@controllers.badges.BadgesController.addUserBadges()
+
+#Health check
+GET  /v1/health                               @controllers.healthmanager.HealthController.getHealth()
+GET  /v1/:service/health                      @controllers.healthmanager.HealthController.getLearnerServiceHealth(service:String)
+
+
+#Notes API
+POST   /v1/note/create                         @controllers.notesmanagement.NotesController.createNote()
+GET    /v1/note/read/:noteId                   @controllers.notesmanagement.NotesController.getNote(noteId:String)
+PATCH  /v1/note/update/:noteId                 @controllers.notesmanagement.NotesController.updateNote(noteId:String)
+POST   /v1/note/search                         @controllers.notesmanagement.NotesController.searchNote()
+DELETE /v1/note/delete/:noteId                 @controllers.notesmanagement.NotesController.deleteNote(noteId:String)
+
+#Audit History API
+POST   /v1/audit/history                       @controllers.audit.AuditLogController.searchAuditHistory()
+
+#skill tag and endoresement
+POST  /v1/user/skill/add 						@controllers.skills.SkillController.addSkill()
+POST  /v1/user/skill/read						@controllers.skills.SkillController.getSkill()
+GET   /v1/skills						@controllers.skills.SkillController.getSkillsList()
+
+#DB Operation API
+POST   /v1/object/read/list                 @controllers.datapersistence.DbOperationController.readAll()
+POST   /v1/object/read                   @controllers.datapersistence.DbOperationController.read()
+POST   /v1/object/create                 @controllers.datapersistence.DbOperationController.create()
+POST   /v1/object/update                 @controllers.datapersistence.DbOperationController.update()
+POST   /v1/object/delete                 @controllers.datapersistence.DbOperationController.delete()
+POST   /v1/object/search                 @controllers.datapersistence.DbOperationController.search()

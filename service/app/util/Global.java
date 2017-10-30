@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.JsonKey;
@@ -19,6 +19,7 @@ import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.models.util.ProjectUtil.Environment;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.responsecode.ResponseCode;
+
 import play.Application;
 import play.GlobalSettings;
 import play.libs.F.Promise;
@@ -40,7 +41,6 @@ public class Global extends GlobalSettings {
   public static ProjectUtil.Environment env;
  
   public static Map<String, String> apiMap = new HashMap<>();
-  private static ConcurrentHashMap<String, Boolean> apiUserAccessToken = new ConcurrentHashMap<>();
   public static String ssoPublicKey = "";
   private class ActionWrapper extends Action.Simple {
     public ActionWrapper(Action<?> action) {
@@ -277,5 +277,12 @@ public class Global extends GlobalSettings {
     apiMap.put("/health", "api.all.health");
     apiMap.put("/v1/audit/history", "api.audit.history");
     apiMap.put("/v1/user/forgotpassword", "api.user.forgotpassword");
+    
+    apiMap.put("/v1/object/read", "api.object.read");
+    apiMap.put("/v1/object/create", "api.object.create");
+    apiMap.put("/v1/object/update", "api.object.update");
+    apiMap.put("/v1/object/delete", "api.object.delete");
+    apiMap.put("/v1/object/read/list", "api.object.read.list");
+    apiMap.put("/v1/object/search", "api.object.search");
   }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import java.util.Map.Entry;
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.util.ActorOperations;
 import org.sunbird.common.models.util.JsonKey;
@@ -50,9 +51,8 @@ public class LearnerController extends BaseController {
       request.setManagerName(ActorOperations.GET_COURSE.getKey());
       request.setOperation(ActorOperations.GET_COURSE.getValue());
       request.setRequest(map);
-      Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
       request.setRequestId(ExecutionContext.getRequestId());
-      return   actorResponseHandler(getRemoteActor(), request, timeout, JsonKey.COURSES, request());
+      return   actorResponseHandler(getActorRef(), request, timeout, JsonKey.COURSES, request());
     } catch (Exception e) {
       return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
     }
@@ -78,8 +78,7 @@ public class LearnerController extends BaseController {
       innerMap.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
       innerMap.put(JsonKey.HEADER, getAllRequestHeaders(request()));
       reqObj.setRequest(innerMap);
-      Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      return  actorResponseHandler(getRemoteActor(), reqObj, timeout, null, request());
+      return  actorResponseHandler(getActorRef(), reqObj, timeout, null, request());
     } catch (Exception e) {
       return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
     }
@@ -103,8 +102,7 @@ public class LearnerController extends BaseController {
       reqObj.setEnv(getEnvironment());
       Map<String, Object> innerMap = createRequest(reqObj);
       reqObj.setRequest(innerMap);
-      Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      return actorResponseHandler(getRemoteActor(), reqObj, timeout, JsonKey.CONTENT_LIST, request());
+      return actorResponseHandler(getActorRef(), reqObj, timeout, JsonKey.CONTENT_LIST, request());
     } catch (Exception e) {
       return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
     }
@@ -165,8 +163,7 @@ public class LearnerController extends BaseController {
       innerMap.put(JsonKey.REQUESTED_BY,ctx().flash().get(JsonKey.USER_ID));
       innerMap.put(JsonKey.USER_ID, reqObj.getRequest().get(JsonKey.USER_ID));
       reqObj.setRequest(innerMap);
-      Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
-      return actorResponseHandler(getRemoteActor(), reqObj, timeout, null, request());
+      return actorResponseHandler(getActorRef(), reqObj, timeout, null, request());
     } catch (Exception e) {
       return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
     }

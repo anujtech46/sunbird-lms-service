@@ -6,18 +6,17 @@ package controllers.healthmanager;
 import controllers.BaseController;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.ActorOperations;
+import org.sunbird.common.models.util.ConfigUtil;
 import org.sunbird.common.models.util.HttpUtil;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LoggerEnum;
 import org.sunbird.common.models.util.ProjectLogger;
 import org.sunbird.common.models.util.ProjectUtil;
-import org.sunbird.common.models.util.PropertiesCache;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.Request;
 import play.libs.F.Promise;
@@ -101,17 +100,11 @@ public class HealthController extends BaseController {
     try {
     	 String body = "{\"request\":{\"filters\":{\"identifier\":\"test\"}}}";
     	 Map<String, String> headers = new HashMap<>();
-    	 headers.put(JsonKey.AUTHORIZATION, System.getenv(JsonKey.AUTHORIZATION));
-         if (ProjectUtil.isStringNullOREmpty((String) headers.get(JsonKey.AUTHORIZATION))) {
-           headers.put(JsonKey.AUTHORIZATION, 
-               PropertiesCache.getInstance().getProperty(JsonKey.EKSTEP_AUTHORIZATION));
-         }
+    	 headers.put(JsonKey.AUTHORIZATION, JsonKey.BEARER + ConfigUtil.config.getString(JsonKey.AUTHORIZATION));
          headers.put("Content-Type", "application/json");
     	 String response = 
-    	          HttpUtil.sendPostRequest(PropertiesCache.getInstance()
-    	                  .getProperty(JsonKey.EKSTEP_BASE_URL)
-    	                  + PropertiesCache.getInstance()
-    	                      .getProperty(JsonKey.EKSTEP_CONTENT_SEARCH_URL), body, headers);
+    	          HttpUtil.sendPostRequest(ConfigUtil.config.getString(JsonKey.EKSTEP_BASE_URL)
+    	                  + ConfigUtil.config.getString(JsonKey.EKSTEP_CONTENT_SEARCH_URL), body, headers);
       if(response.contains("OK")){ 
         responseList.add(
             ProjectUtil.createCheckResponse(JsonKey.EKSTEP_SERVICE, false, null));
@@ -136,20 +129,4 @@ public class HealthController extends BaseController {
     return Promise.<Result>pure(ok(play.libs.Json.toJson(response)));
   }
   
-  
-  /**
-   * 
-   * @param request
-   * @return Map<String, String>
-   */
-  private Map<String, String> getAllRequestHeaders(play.mvc.Http.Request request) {
-    Map<String, String> map = new HashMap<>();
-    Map<String, String[]> headers = request.headers();
-    Iterator<Entry<String, String[]>> itr = headers.entrySet().iterator();
-    while (itr.hasNext()) {
-      Entry<String, String[]> entry = itr.next();
-      map.put(entry.getKey(), entry.getValue()[0]);
-    }
-    return map;
-  }
 }

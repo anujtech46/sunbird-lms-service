@@ -6,7 +6,8 @@ import controllers.actorutility.impl.RemoteActorSystem;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.sunbird.common.models.util.PropertiesCache;
+import org.sunbird.common.models.util.ConfigUtil;
+import org.sunbird.common.models.util.JsonKey;
 
 public class ActorSystemTest {
   
@@ -15,7 +16,7 @@ public class ActorSystemTest {
   @BeforeClass
   public static void setUp() {
     
-    provider = PropertiesCache.getInstance().getProperty("api_actor_provider");
+    provider = ConfigUtil.config.getString(JsonKey.API_ACTOR_PROVIDER);
   }
   
   @SuppressWarnings("deprecation")

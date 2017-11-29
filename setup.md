@@ -22,30 +22,29 @@
     7. sunbird_es_cluster (optional): name of the elasticsearch cluster
     8. sunbird_learner_actor_host: host running for learner actor
     9. sunbird_learner_actor_port: port on which learner actor is running.
-    10. ekstep_content_search_base_url : provide base url for EkStep content search
-    11. ekstep_authorization : provide authorization for value for content search
-    12. sunbird_pg_host: postgres host name or ip
-    13. sunbird_pg_port: postgres port number
-    14. sunbird_pg_db: postgres db name
-    15. sunbird_pg_user: postgres db user name
-    16. sunbird_pg_password: postgress db password 
-    17. sunbird_installation
-    18. ekstep_api_base_url
-    19. sunbird_mail_server_host
-    20. sunbird_mail_server_port
-    21. sunbird_mail_server_username
-    22. sunbird_mail_server_password
-    23. sunbird_mail_server_from_email
-    24. sunbird_account_name : account name of azure blob storage.
-    25. sunbird_account_key : azure blob storage account key
-    26. sunbird_quartz_mode: put this value {"embedded" to run quartz without any data base, "any other value" to run with postgres db }
-    27. sunbird_encryption_key
-    28. sunbird_encryption_mode : mode value is either local or remote
-    29. sunbird_sso_publickey : sso public key
-    30. sunbird_env_logo_url : logo url for sending email.(http://www.paramountias.com/media/images/current-affairs/diksha-portal.jpg) 
-    31. sunird_web_url : web page url
-    32. sunbird_app_url : paly store url to downlaod the app
-    33 sunbird_fcm_account_key : account key for FCM     
+    10. ekstep_authorization : provide authorization for value for content search
+    11. sunbird_pg_host: postgres host name or ip
+    12. sunbird_pg_port: postgres port number
+    13. sunbird_pg_db: postgres db name
+    14. sunbird_pg_user: postgres db user name
+    15. sunbird_pg_password: postgress db password 
+    16. sunbird_installation
+    17. ekstep_api_base_url
+    18. sunbird_mail_server_host
+    19. sunbird_mail_server_port
+    20. sunbird_mail_server_username
+    21. sunbird_mail_server_password
+    22. sunbird_mail_server_from_email
+    23. sunbird_account_name : account name of azure blob storage.
+    24. sunbird_account_key : azure blob storage account key
+    25. sunbird_quartz_mode: put this value {"embedded" to run quartz without any data base, "any other value" to run with postgres db }
+    26. sunbird_encryption_key
+    27. sunbird_encryption_mode : mode value is either local or remote
+    28. sunbird_sso_publickey : sso public key
+    29. sunbird_env_logo_url : logo url for sending email.(http://www.paramountias.com/media/images/current-affairs/diksha-portal.jpg) 
+    30. sunird_web_url : web page url
+    31. sunbird_app_url : paly store url to downlaod the app
+    32 sunbird_fcm_account_key : account key for FCM     
     
 ## Do the below env setup , if you are planing to run background actor in remote mode.
 	1. sunbird_background_actor_host: host running for learner background actor
@@ -53,7 +52,7 @@
 	
 ## Do the below env setup , to start a actor system on a machine {"RemoteMiddlewareActorSystem" it will start Normal Actor System on that machine,             ##"BackGroundRemoteMiddlewareActorSystem" , it will start background actor}.
 
-   1.  actor_service_name : actor system name to start{values are "RemoteMiddlewareActorSystem" , "BackGroundRemoteMiddlewareActorSystem"}
+   1.  sunbird_actor_system_name : actor system name to start{values are "RemoteMiddlewareActorSystem" , "BackGroundRemoteMiddlewareActorSystem"}
 
 ## Build
 1. Run "git submodule foreach git pull origin master" to pull the latest sunbird-common submodule.

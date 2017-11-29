@@ -8,9 +8,9 @@ import java.util.Map;
 
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.common.models.response.Response;
+import org.sunbird.common.models.util.ConfigUtil;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.ProjectLogger;
-import org.sunbird.common.models.util.PropertiesCache;
 import org.sunbird.helper.ServiceFactory;
 import org.sunbird.learner.Application;
 import org.sunbird.learner.util.Util;
@@ -45,7 +45,7 @@ public class AuthenticationHelper {
     SSOManager ssoManager = SSOServiceFactory.getInstance();
     String userId = ""; 
     try { 
-      boolean response = Boolean.parseBoolean(PropertiesCache.getInstance().getProperty(JsonKey.IS_SSO_ENABLED));
+      boolean response = ConfigUtil.config.getBoolean(JsonKey.IS_SSO_ENABLED);
       if (response) {
       userId = ssoManager.verifyToken(token);
       } else {

@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
+import org.sunbird.common.models.util.ConfigUtil;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LoggerEnum;
 import org.sunbird.common.models.util.ProjectLogger;
@@ -99,7 +100,7 @@ public class Global extends GlobalSettings {
 
     setEnvironment();
     createApiMap();
-    ssoPublicKey = System.getenv(JsonKey.SSO_PUBLIC_KEY);
+    ssoPublicKey = ConfigUtil.config.getString(JsonKey.SSO_PUBLIC_KEY);
     ProjectLogger.log("Server started.. with Environment --" + env.name(), LoggerEnum.INFO.name());
   }
 

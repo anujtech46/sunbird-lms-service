@@ -2,8 +2,9 @@ package controllers.actorutility;
 
 import controllers.actorutility.impl.LocalActorSystem;
 import controllers.actorutility.impl.RemoteActorSystem;
+import org.sunbird.common.models.util.ConfigUtil;
+import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.ProjectLogger;
-import org.sunbird.common.models.util.PropertiesCache;
 
 /**
  * 
@@ -17,8 +18,7 @@ public class ActorSystemFactory {
   private ActorSystemFactory() {}
 
   static {
-    PropertiesCache cache = PropertiesCache.getInstance();
-    if ("local".equalsIgnoreCase(cache.getProperty("api_actor_provider"))) {
+    if ("local".equalsIgnoreCase(ConfigUtil.config.getString(JsonKey.API_ACTOR_PROVIDER))) {
       ProjectLogger.log("Initializing Normal Local Actor System  called from controller");
       if (null == actorSystem) {
         actorSystem = LocalActorSystem.getInstance();

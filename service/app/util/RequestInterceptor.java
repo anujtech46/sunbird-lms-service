@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.sunbird.common.models.util.ConfigUtil;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LoggerEnum;
 import org.sunbird.common.models.util.ProjectLogger;
 import org.sunbird.common.models.util.ProjectUtil;
-import org.sunbird.common.models.util.PropertiesCache;
 import org.sunbird.common.request.HeaderParam;
 import org.sunbird.common.responsecode.ResponseCode;
 import play.mvc.Http.Request;
@@ -78,9 +78,8 @@ public class RequestInterceptor {
           return ResponseCode.unAuthorised.getErrorCode();
         }
       }
-      if (ProjectUtil.isStringNullOREmpty(System.getenv(JsonKey.SSO_PUBLIC_KEY))
-          && Boolean.parseBoolean(PropertiesCache.getInstance()
-              .getProperty(JsonKey.IS_SSO_ENABLED))) {
+      if (ConfigUtil.config.hasPath(JsonKey.SSO_PUBLIC_KEY)
+          && ConfigUtil.config.getBoolean(JsonKey.IS_SSO_ENABLED)) {
         ProjectLogger.log("SSO public key is not set by environment variable==",
             LoggerEnum.INFO.name());
         response = "{userId}" + JsonKey.NOT_AVAILABLE;

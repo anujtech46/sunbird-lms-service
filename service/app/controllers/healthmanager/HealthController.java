@@ -102,7 +102,7 @@ public class HealthController extends BaseController {
     	 Map<String, String> headers = new HashMap<>();
     	 headers.put(JsonKey.AUTHORIZATION, JsonKey.BEARER + ConfigUtil.config.getString(JsonKey.AUTHORIZATION));
          headers.put("Content-Type", "application/json");
-    	 String response = 
+    	 String response =
     	          HttpUtil.sendPostRequest(ConfigUtil.config.getString(JsonKey.EKSTEP_BASE_URL)
     	                  + ConfigUtil.config.getString(JsonKey.EKSTEP_CONTENT_SEARCH_URL), body, headers);
       if(response.contains("OK")){ 

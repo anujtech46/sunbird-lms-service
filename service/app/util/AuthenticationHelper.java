@@ -48,7 +48,7 @@ public class AuthenticationHelper {
     SSOManager ssoManager = SSOServiceFactory.getInstance();
     String userId = ""; 
     try { 
-      boolean response = ConfigUtil.config.getBoolean(JsonKey.IS_SSO_ENABLED);
+      boolean response = ConfigUtil.getBoolean(JsonKey.IS_SSO_ENABLED);
       if (response) {
       userId = ssoManager.verifyToken(token);
       } else {

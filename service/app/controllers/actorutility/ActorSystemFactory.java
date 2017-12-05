@@ -18,7 +18,7 @@ public class ActorSystemFactory {
   private ActorSystemFactory() {}
 
   static {
-    if ("local".equalsIgnoreCase(ConfigUtil.config.getString(JsonKey.API_ACTOR_PROVIDER))) {
+    if ("local".equalsIgnoreCase(ConfigUtil.getString(JsonKey.API_ACTOR_PROVIDER))) {
       ProjectLogger.log("Initializing Normal Local Actor System  called from controller");
       if (null == actorSystem) {
         actorSystem = LocalActorSystem.getInstance();

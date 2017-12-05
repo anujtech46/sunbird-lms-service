@@ -33,7 +33,7 @@ public class DbOperationController extends BaseController {
   private static final String REQUIRED_FIELDS = "requiredFields";
   private CassandraOperation cassandraOperation = ServiceFactory.getInstance();
   private static CassandraConnectionManager manager = CassandraConnectionMngrFactory
-      .getObject(ConfigUtil.config.getString(JsonKey.SUNBIRD_CASSANDRA_MODE));
+      .getObject(ConfigUtil.getString(JsonKey.SUNBIRD_CASSANDRA_MODE));
   private static final String PAYLOAD = "payload";
   private static final String ENTITY_NAME = "entityName";
   private static final String INDEXED = "indexed";

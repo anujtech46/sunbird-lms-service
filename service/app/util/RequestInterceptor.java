@@ -80,7 +80,7 @@ public class RequestInterceptor {
         }
       }
       if (ConfigUtil.config.hasPath(JsonKey.SSO_PUBLIC_KEY)
-          && ConfigUtil.config.getBoolean(JsonKey.IS_SSO_ENABLED)) {
+          && ConfigUtil.getBoolean(JsonKey.IS_SSO_ENABLED)) {
         ProjectLogger.log("SSO public key is not set by environment variable==",
             LoggerEnum.INFO.name());
         response = "{userId}" + JsonKey.NOT_AVAILABLE;

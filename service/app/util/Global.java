@@ -100,7 +100,8 @@ public class Global extends GlobalSettings {
 
     setEnvironment();
     createApiMap();
-    ssoPublicKey = ConfigUtil.config.getString(JsonKey.SSO_PUBLIC_KEY);
+    ProjectLogger.log("Configurations: " + ConfigUtil.config);
+    ssoPublicKey = ConfigUtil.getString(JsonKey.SSO_PUBLIC_KEY);
     ProjectLogger.log("Server started.. with Environment --" + env.name(), LoggerEnum.INFO.name());
   }
 

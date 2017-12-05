@@ -16,7 +16,7 @@ public class ActorSystemTest {
   @BeforeClass
   public static void setUp() {
     
-    provider = ConfigUtil.config.getString(JsonKey.API_ACTOR_PROVIDER);
+    provider = ConfigUtil.getString(JsonKey.API_ACTOR_PROVIDER);
   }
   
   @SuppressWarnings("deprecation")

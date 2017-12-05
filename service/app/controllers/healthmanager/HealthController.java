@@ -100,11 +100,11 @@ public class HealthController extends BaseController {
     try {
     	 String body = "{\"request\":{\"filters\":{\"identifier\":\"test\"}}}";
     	 Map<String, String> headers = new HashMap<>();
-    	 headers.put(JsonKey.AUTHORIZATION, JsonKey.BEARER + ConfigUtil.config.getString(JsonKey.AUTHORIZATION));
+    	 headers.put(JsonKey.AUTHORIZATION, JsonKey.BEARER + ConfigUtil.getString(JsonKey.AUTHORIZATION));
          headers.put("Content-Type", "application/json");
     	 String response =
-    	          HttpUtil.sendPostRequest(ConfigUtil.config.getString(JsonKey.EKSTEP_BASE_URL)
-    	                  + ConfigUtil.config.getString(JsonKey.EKSTEP_CONTENT_SEARCH_URL), body, headers);
+    	          HttpUtil.sendPostRequest(ConfigUtil.getString(JsonKey.EKSTEP_BASE_URL)
+    	                  + ConfigUtil.getString(JsonKey.EKSTEP_CONTENT_SEARCH_URL), body, headers);
       if(response.contains("OK")){ 
         responseList.add(
             ProjectUtil.createCheckResponse(JsonKey.EKSTEP_SERVICE, false, null));

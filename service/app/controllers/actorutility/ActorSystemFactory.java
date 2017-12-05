@@ -20,7 +20,7 @@ public class ActorSystemFactory {
   static {
     ProjectLogger.log("Inside ActorSystemFactory static block");
     try{
-    ProjectLogger.log("api_actor_provider value "+ ConfigUtil.getString(JsonKey.API_ACTOR_PROVIDER)));
+    ProjectLogger.log("api_actor_provider value "+ ConfigUtil.getString(JsonKey.API_ACTOR_PROVIDER));
     if ("local".equalsIgnoreCase(ConfigUtil.getString(JsonKey.API_ACTOR_PROVIDER))) {
       ProjectLogger.log("Initializing Normal Local Actor System  called from controller");
       if (null == actorSystem) {

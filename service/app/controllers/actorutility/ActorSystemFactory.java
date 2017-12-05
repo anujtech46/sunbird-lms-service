@@ -18,6 +18,9 @@ public class ActorSystemFactory {
   private ActorSystemFactory() {}
 
   static {
+    ProjectLogger.log("Inside ActorSystemFactory static block");
+    try{
+    ProjectLogger.log("api_actor_provider value "+ ConfigUtil.getString(JsonKey.API_ACTOR_PROVIDER)));
     if ("local".equalsIgnoreCase(ConfigUtil.getString(JsonKey.API_ACTOR_PROVIDER))) {
       ProjectLogger.log("Initializing Normal Local Actor System  called from controller");
       if (null == actorSystem) {
@@ -29,6 +32,9 @@ public class ActorSystemFactory {
         actorSystem = RemoteActorSystem.getInstance();
       }
     }
+    }catch(Exception ex ){
+      ProjectLogger.log("Exception In controllers.actorutility.ActorSystemFactory "+ex);
+      }
   }
 
   public static ActorSystem getActorSystem() {

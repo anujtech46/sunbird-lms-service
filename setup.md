@@ -44,7 +44,8 @@
     29. sunbird_env_logo_url : logo url for sending email.(http://www.paramountias.com/media/images/current-affairs/diksha-portal.jpg) 
     30. sunird_web_url : web page url
     31. sunbird_app_url : paly store url to downlaod the app
-    32 sunbird_fcm_account_key : account key for FCM     
+    32 sunbird_fcm_account_key : account key for FCM
+    33 sunbird_msg_91_auth : msg 91 auth
     
 ## Do the below env setup , if you are planing to run background actor in remote mode.
 	1. sunbird_background_actor_host: host running for learner background actor

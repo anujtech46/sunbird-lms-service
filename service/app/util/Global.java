@@ -97,7 +97,7 @@ public class Global extends GlobalSettings {
    * @param app Application
    */
   public void onStart(Application app) {
-
+    ProjectLogger.log("Test***");
     setEnvironment();
     createApiMap();
     ProjectLogger.log("Configurations: " + ConfigUtil.config);

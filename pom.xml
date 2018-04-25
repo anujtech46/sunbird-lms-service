@@ -7,6 +7,7 @@
   <name>sunbird_lms_service</name>
   <modules>
       <module>service/libs</module>
-      <module>service</module>
+      <module>service/learning-service</module>
+      <module>service/telemetry-service</module>
   </modules>
 </project>

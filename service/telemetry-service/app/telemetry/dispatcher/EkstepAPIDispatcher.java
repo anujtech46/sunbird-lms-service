@@ -1,0 +1,54 @@
+package telemetry.dispatcher;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.sunbird.common.models.util.HttpUtil;
+import org.sunbird.common.models.util.JsonKey;
+import org.sunbird.common.models.util.LoggerEnum;
+import org.sunbird.common.models.util.ProjectLogger;
+import org.sunbird.common.models.util.ProjectUtil;
+import org.sunbird.common.models.util.PropertiesCache;
+
+import play.libs.Json;
+
+public class EkstepAPIDispatcher implements IDispatcher {
+
+	@Override
+	public void dispatch(List<String> events) throws Exception {
+		ProjectLogger.log("EkstepAPIDispatcher got events: " + events.size(), LoggerEnum.INFO.name());
+		String requestBody = "{\"events\": " + "["+ StringUtils.join(events, ",") + "]" + "}";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put(JsonKey.AUTHORIZATION, JsonKey.BEARER + System.getenv(JsonKey.EKSTEP_AUTHORIZATION));
+		headers.put("Content-Type", "application/json");
+		if (StringUtils.isBlank((String) headers.get(JsonKey.AUTHORIZATION))) {
+			headers.put(JsonKey.AUTHORIZATION, PropertiesCache.getInstance().getProperty(JsonKey.EKSTEP_AUTHORIZATION));
+		}
+		String response = HttpUtil.sendPostRequest(getTelemetryUrl(), requestBody, headers);
+		ProjectLogger.log("EkstepAPIDispatcher execution response: "+ response, LoggerEnum.INFO.name());
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+
+	/**
+	 * This method will return telemetry url.
+	 * 
+	 * @return
+	 */
+	private String getTelemetryUrl() {
+		String telemetryBaseUrl = System.getenv(JsonKey.EKSTEP_BASE_URL);
+		if (ProjectUtil.isStringNullOREmpty(telemetryBaseUrl)) {
+			telemetryBaseUrl = PropertiesCache.getInstance().getProperty(JsonKey.EKSTEP_BASE_URL);
+		}
+		telemetryBaseUrl = telemetryBaseUrl
+				+ PropertiesCache.getInstance().getProperty(JsonKey.EKSTEP_TELEMETRY_API_URL);
+		ProjectLogger.log("telemetry url==" + telemetryBaseUrl);
+		return telemetryBaseUrl;
+	}
+
+}

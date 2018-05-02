@@ -1,11 +1,13 @@
 package controllers;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.response.ResponseParams;
 import org.sunbird.common.models.response.ResponseParams.StatusType;
 import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.request.ExecutionContext;
+import org.sunbird.common.request.Request;
 import org.sunbird.common.responsecode.ResponseCode;
 
 import play.mvc.Result;
@@ -55,7 +57,7 @@ public class BaseController extends Controller {
 		ResponseParams resStatus = new ResponseParams();
 		String message = setMessage(e);
 		resStatus.setErrmsg(message);
-		resStatus.setStatus(StatusType.failed.name());
+		resStatus.setStatus(StatusType.FAILED.name());
 		if (e instanceof ProjectCommonException) {
 			ProjectCommonException me = (ProjectCommonException) e;
 			resStatus.setErr(me.getCode());
@@ -92,6 +94,35 @@ public class BaseController extends Controller {
 		params.setMsgid(ExecutionContext.getRequestId());
 		params.setStatus(ResponseCode.getHeaderResponseCode(code.getResponseCode()).name());
 		return params;
+	}
+
+	public Result createCommonResponse(String path, Response response) {
+		return Results.ok(
+		        Json.toJson(BaseController.createSuccessResponse(path, response)));
+	}
+	
+	/**
+	 * This method will create data for success response.
+	 *
+	 * @param request
+	 *            play.mvc.Http.Request
+	 * @param response
+	 *            Response
+	 * @return Response
+	 */
+	public static Response createSuccessResponse(String path, Response response) {
+
+		if (StringUtils.isNotBlank(path)) {
+			response.setVer(getApiVersion(path));
+		} else {
+			response.setVer("");
+		}
+		response.setId(getApiResponseId());
+		response.setTs(ProjectUtil.getFormattedDate());
+		ResponseCode code = ResponseCode.getResponse(ResponseCode.success.getErrorCode());
+		code.setResponseCode(ResponseCode.OK.getResponseCode());
+		response.setParams(createResponseParamObj(code));
+		return response;
 	}
 
 	/**

@@ -8,7 +8,7 @@ import java.util.List;
  *
  */
 
-public interface IDispatcher {
+public interface  IDispatcher {
 
-	public void dispatch(List<String> events);
+	public void dispatch(List<String> events) throws Exception;
 }

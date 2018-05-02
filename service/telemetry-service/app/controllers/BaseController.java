@@ -57,7 +57,7 @@ public class BaseController extends Controller {
 		ResponseParams resStatus = new ResponseParams();
 		String message = setMessage(e);
 		resStatus.setErrmsg(message);
-		resStatus.setStatus(StatusType.FAILED.name());
+		resStatus.setStatus(StatusType.failed.name());
 		if (e instanceof ProjectCommonException) {
 			ProjectCommonException me = (ProjectCommonException) e;
 			resStatus.setErr(me.getCode());

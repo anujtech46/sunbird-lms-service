@@ -144,7 +144,7 @@ public class BadgeClassValidator extends BaseRequestValidator {
    * @param subtype Badge subtype.
    */
   private void validateSubtype(String subtype) {
-    if (subtype != null) {
+    if (StringUtils.isNotBlank(subtype)) {
       String validSubtypes = System.getenv(BadgingJsonKey.VALID_BADGE_SUBTYPES);
       if (StringUtils.isBlank(validSubtypes)) {
         validSubtypes = propertiesCache.getProperty(BadgingJsonKey.VALID_BADGE_SUBTYPES);
@@ -154,12 +154,11 @@ public class BadgeClassValidator extends BaseRequestValidator {
       for (String validSubtype : validSubtypesList) {
         if (validSubtype.equalsIgnoreCase(subtype)) return;
       }
-
       ResponseCode error = ResponseCode.invalidBadgeSubtype;
-      throw new ProjectCommonException(
-          error.getErrorCode(),
-          error.getErrorMessage(),
-          ResponseCode.CLIENT_ERROR.getResponseCode());
+      throw createExceptionByResponseCode(error, ResponseCode.CLIENT_ERROR.getResponseCode());
+    } else {
+      throw createExceptionByResponseCode(
+          ResponseCode.badgeSubTypeRequired, ResponseCode.CLIENT_ERROR.getResponseCode());
     }
   }
 

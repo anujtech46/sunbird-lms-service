@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import controller.mapper.RequestMapper;
 import play.libs.F;
 import play.libs.F.Promise;
-import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 import play.mvc.Results;
 
@@ -43,7 +42,22 @@ public class TelemetryController extends BaseController {
 	// private TelemetryDataHandlerService service =
 	// TelemetryServiceFactory.getInstance();
 	private ObjectMapper mapper = new ObjectMapper();
+	private static int defaultSize = 1000;
 
+	static {
+		try {
+			String maxCountStr = System.getenv("sunbird_telemetry_request_max_count");
+			if(StringUtils.isNotBlank(maxCountStr)) {
+				defaultSize = Integer.parseInt(maxCountStr);
+				ProjectLogger.log("Updated default telemetry_request_max_count to " + defaultSize, LoggerEnum.INFO.name());
+			} else {
+				ProjectLogger.log("Default telemetry_request_max_count is " + defaultSize, LoggerEnum.INFO.name());
+			}
+		} catch (Exception e) {
+			ProjectLogger.log("Error while setting default telemetry_request_max_count. Using default value: "+ defaultSize, LoggerEnum.ERROR.name());
+		}
+	}
+	
 	/**
 	 * This method will receive the telemetry data and send it to EKStep to process
 	 * it.
@@ -69,10 +83,12 @@ public class TelemetryController extends BaseController {
 						"Please provide valid headers.", ResponseCode.CLIENT_ERROR.getResponseCode());
 			}
 
+			
+			
 			Result result = Results.status(200);
 			return Promise.<Result>pure(result);
 		} catch (Exception e) {
-			return Promise.<Result>pure(createCommonExceptionResponse(e, request()));
+			return Promise.<Result>pure(createCommonExceptionResult(request().path(), e));
 		}
 
 	}
@@ -123,13 +139,11 @@ public class TelemetryController extends BaseController {
 						"Too many events to process. Max limit for a request is 1000.",
 						ResponseCode.CLIENT_ERROR.getResponseCode());
 			} else {
-				System.out.println("Number of events: "+ allEvents.size());
 				Request request = new Request();
 				Map<String, List<String>> reqMap = new HashMap<String, List<String>>();
 				reqMap.put("events", allEvents);
 				return request;
 			}
-
 		} catch (Exception e) {
 			throw new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode(),
 					"Please provide valid binary gzip file. File structure is invalid.",

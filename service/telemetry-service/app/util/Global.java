@@ -79,24 +79,6 @@ public class Global extends GlobalSettings {
 	}
 
 	/**
-	 * This method will do request data validation for GET method only. As a GET
-	 * request user must send some key in header.
-	 * 
-	 * @param request
-	 *            Request
-	 * @param errorMessage
-	 *            String
-	 * @result Promise<Result>
-	 */
-	public Promise<Result> onDataValidationError(Request request, String errorMessage) {
-		ProjectLogger.log("Data error found--");
-		ResponseCode code = ResponseCode.getResponse(errorMessage);
-		ResponseCode headerCode = ResponseCode.CLIENT_ERROR;
-		Response resp = BaseController.createFailureResponse(request, code, headerCode);
-		return Promise.<Result>pure(Results.status(ResponseCode.CLIENT_ERROR.getResponseCode(), Json.toJson(resp)));
-	}
-
-	/**
 	 * This method will be used to send the request header missing error message.
 	 */
 	@Override
@@ -106,13 +88,12 @@ public class Global extends GlobalSettings {
 		ProjectCommonException commonException = null;
 		if (t instanceof ProjectCommonException) {
 			commonException = (ProjectCommonException) t;
-			response = BaseController.createResponseOnException(request.path(), request.method(),
-					(ProjectCommonException) t);
+			response = BaseController.createResponseOnException(request.path(), (ProjectCommonException) t);
 		} else {
 			commonException = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
 					ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
-		response = BaseController.createResponseOnException(request.path(), request.method(), commonException);
+		response = BaseController.createResponseOnException(request.path(), commonException);
 		return Promise.<Result>pure(Results.status(ResponseCode.SERVER_ERROR.getResponseCode(), Json.toJson(response)));
 	}
 }

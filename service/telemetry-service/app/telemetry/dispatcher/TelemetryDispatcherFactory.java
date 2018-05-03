@@ -6,7 +6,7 @@ import org.sunbird.common.responsecode.ResponseCode;
 public class TelemetryDispatcherFactory {
 
 	private static IDispatcher kafka = new KafkaDispatcher();
-	private static IDispatcher ekstep = new EkstepAPIDispatcher();
+	private static IDispatcher ekstep = new EkstepTelemetryDispatcher();
 
 	public static IDispatcher getDispatcher(String name) {
 		IDispatcher dispatcher = null;

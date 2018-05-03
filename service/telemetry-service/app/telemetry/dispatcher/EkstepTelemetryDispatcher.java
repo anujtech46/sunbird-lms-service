@@ -1,6 +1,5 @@
 package telemetry.dispatcher;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +12,7 @@ import org.sunbird.common.models.util.ProjectLogger;
 import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.models.util.PropertiesCache;
 
-import play.libs.Json;
-
-public class EkstepAPIDispatcher implements IDispatcher {
+public class EkstepTelemetryDispatcher implements IDispatcher {
 
 	@Override
 	public void dispatch(List<String> events) throws Exception {
@@ -29,10 +26,6 @@ public class EkstepAPIDispatcher implements IDispatcher {
 		}
 		String response = HttpUtil.sendPostRequest(getTelemetryUrl(), requestBody, headers);
 		ProjectLogger.log("EkstepAPIDispatcher execution response: "+ response, LoggerEnum.INFO.name());
-	}
-	
-	public static void main(String[] args) {
-		
 	}
 
 	/**

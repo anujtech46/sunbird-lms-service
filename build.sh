@@ -11,4 +11,4 @@ name=$(e "${m}" "name")
 version=$(e "${m}" "version")
 
 
-docker build -f ./Dockerfile -t ${org}/${name}:${version}-bronze .
+docker build -f Dockerfile -t ${org}/${name}:${version}-bronze .

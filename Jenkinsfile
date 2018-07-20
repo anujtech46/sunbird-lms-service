@@ -1,6 +1,6 @@
 #!groovy
 
-node('build-slave') {
+node('master') {
 
    currentBuild.result = "SUCCESS"
    cleanWs()

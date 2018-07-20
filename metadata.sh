@@ -1,3 +1,3 @@
 #!/bin/sh
 # return version
-echo '{"name":"learner_service","version":"1.7.2","org":"tarento","hubuser":"anujtech46"}'
+echo '{"name":"learner_service","version":"1.7.3","org":"tarento","hubuser":"anujtech46"}'
